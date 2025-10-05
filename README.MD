@@ -38,12 +38,15 @@ Fork of the Midnight Lizard project.
 
 ```
 cd ~/Desktop/Midnight-Lizard-master
-chmod +x docker-build.sh
-./docker-build.sh
+docker build -t midnight-lizard .
+docker create --name extractor midnight-lizard
+docker cp extractor:/build/ ./MidnightLizard/
+docker rm extractor
 ```
-3. When it finishes, there should be a releases/dist folder containing the compiled extension.
+3. When it finishes, there should be a MidnightLizard folder containing the compiled extension.
 
 ## Re-Install Extension
+1. Copy the MidnightLizard folder to a folder for your web browser to access.
 1. Use Developer Mode to install extension from the "Load unpacked" dialogue box.
 2. Select the dist folder located inside the releases folder.
 3. Import preferences by copying the entire textfile and pasting it in the Console view for the extension preferences.

@@ -1,40 +1,54 @@
-# Midnight Lizard [![OpenCollective](https://opencollective.com/midnight-lizard/backers/badge.svg)](#backers) [![OpenCollective](https://opencollective.com/midnight-lizard/sponsors/badge.svg)](#sponsors) [![Crowdin](https://d322cqt584bo4o.cloudfront.net/midnight-lizard/localized.svg)](https://translate.midnight-lizard.org)
+Fork of the Midnight Lizard project.
 
-**Midnight Lizard** web-extension for Google **Chrome**™ and Mozilla **Firefox**™ provides custom color schemes for all websites. Each color scheme works on all websites and will never become outdated. There are many predefined color schemes and you can install more from [midnight-lizard.org](https://midnight-lizard.org/schemes)
+## Preferences Back-up from a previous installation:
 
-![Wikipedia example](/promo/screenshots/wikipedia-orion-nebula.png?raw=true "Wikipedia example")
+```
+(async () => {
+    try {
+        if (!chrome || !chrome.storage) {
+            throw new Error('The chrome.storage API is not available.');
+        }
 
-✔ Choose between dark, light, grayscale or colorful color schemes  
-✔ Modify existing or create new color schemes  
-✔ Use different color schemes on each website  
-✔ Adjust brightness, saturation, contrast and hues  
-✔ Improve accessibility and readability  
-✔ Increase contrast to make text easier to read  
-✔ Apply blue light filter to shift all colors towards red light  
-✔ Keep original images and hues without inversion  
-✔ Schedule automatic activation and deactivation  
-✔ Or follow system color scheme schedule  
-✔ Use with PDF and local files (enable in browser settings)  
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub><sup>PDF processing is available only in Chromium-based browsers</sup></sub>  
-✔ Dynamically change Firefox theme (disabled by default)  
-✔ Shade bright colors and images  
-✔ Change any colour you want  
-✔ Synchronize your settings  
-✔ Configure background, text, buttons, links, borders, images and scrollbars  
-✔ Apply globally, per-website or with url match patterns  
-✔ Switch between websites blacklist and whitelist modes  
-✔ Use Simplified mode to improve performance on heavy websites  
-✔ Use keyboard shortcuts to toggle extension  
-  ⮚ on current website: Alt+Shift+L  
-  ⮚ globally: Alt+Shift+M  
+        const getStorageData = (storageArea) => new Promise(resolve => storageArea.get(null, result => resolve(result)));
+        
+        const syncData = await getStorageData(chrome.storage.sync);
+        const localData = await getStorageData(chrome.storage.local);
 
-## CONTRIBUTING
-  🌍 [Help translate Midnight Lizard into other languages](https://translate.midnight-lizard.org)  
-  🐛 [Found a bug or have a new feature proposal?](https://github.com/Midnight-Lizard/Midnight-Lizard/issues/new)  
-  💰 [Donate to help us cover infrastructure expenses](https://opencollective.com/midnight-lizard#contribute)  
+        const syncJson = JSON.stringify(syncData);
+        const localJson = JSON.stringify(localData);
 
-## BACKERS
-[![Backers](https://opencollective.com/midnight-lizard/backers.svg?width=890)](https://opencollective.com/midnight-lizard#backers)  
+        const restoreScript = `
+(async () => {
+    try {
+        const setStorageData = (storageArea, data) => new Promise(resolve => storageArea.set(data, resolve));
+        await setStorageData(chrome.storage.sync, ${syncJson});
+        await setStorageData(chrome.storage.local, ${localJson});
+        alert('Settings have been restored! Please close and re-open the popup to see the changes.');
+    } catch (e) {
+        console.error('Error restoring settings:', e);
+        alert('An error occurred while restoring. See the console for details.');
+    }
+})();
+        `;
+        
+        console.log("✅ SUCCESS! The backup script is ready. Copy the text block below (the one inside the quotes) and paste it into a text file.");
+        console.log(restoreScript);
+        alert('✅ SUCCESS! The backup script has been printed to the console below. Please copy it from there.');
 
-## SPONSORS
-[![Sponsors](https://opencollective.com/midnight-lizard/sponsors.svg?width=890)](https://opencollective.com/midnight-lizard#sponsors)  
+    } catch (e) {
+        console.error('Error creating backup:', e);
+        alert(`An error occurred during backup: ${e.message}`);
+    }
+})();
+```
+Copy the async() output to a textfile.
+
+## To compile the plugin:
+
+- Requires Docker to be running.
+
+```
+cd ~/Desktop/Midnight-Lizard-master
+chmod +x docker-build.sh
+./docker-build.sh
+```

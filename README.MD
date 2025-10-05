@@ -1,6 +1,6 @@
 Fork of the Midnight Lizard project.
 
-## To back-up preferences from a previous installation:
+## To back-up preferences from a previous installation or to transfer preferences to a different device:
 
 1. On a machine with your original, configured Midnight Lizard, open its popup, right-click inside, and select "Inspect."
 2. Go to the "Console" tab.
@@ -72,3 +72,11 @@ docker rm extractor
 })();
 ```
 5. Restart Brave to see the changes!
+
+## Moving Midnight Lizard to Other Devices
+
+Since this is compiled locally, it will not sync automatically to other devices. To manually sync the plug-in and it's preferences:
+
+1. Find the MidnightLizard directory and the saved preferences text file and place them somewhere the other devices access (e.g., OneDrive folder). 
+2. On the other machines, install the plug-in via Developer mode.
+3. Use the backup textfile to restore preferences.

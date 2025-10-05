@@ -1,6 +1,7 @@
-FROM node:10
+FROM node:18-alpine
 WORKDIR /build
-COPY ./package.json .
-RUN npm install
+COPY package*.json ./
+RUN npm install --legacy-peer-deps
 COPY . .
-ENTRYPOINT npm run prod-pack
+RUN export NODE_OPTIONS=--openssl-legacy-provider && npm run prod-pack
+ENTRYPOINT ["cp", "-r", "./dist", "./releases/"]

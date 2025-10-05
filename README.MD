@@ -43,14 +43,13 @@ docker create --name extractor midnight-lizard
 docker cp extractor:/build/ ./MidnightLizard/
 docker rm extractor
 ```
-3. When it finishes, there should be a MidnightLizard folder containing the compiled extension.
+3. When it finishes, there should be a MidnightLizard subfolder containing the compiled extension.
 
 ## Re-Install Extension
 1. Copy the MidnightLizard folder to a folder for your web browser to access.
-1. Use Developer Mode to install extension from the "Load unpacked" dialogue box.
-2. Select the dist folder located inside the releases folder.
-3. Import preferences by copying the entire textfile and pasting it in the Console view for the extension preferences.
-4. Finally run the following to copy the preferences from sync storage to local storage:
+2. Use Developer Mode to install the extension from the "Load unpacked" dialogue box.
+3. To import the saved preferences, open the Midnight Lizard settings box and go to the Console view. Paste the entire textfile from Step 4 into the console.
+4. Finally run the following in the same console area to copy the preferences from sync storage to local storage:
 ```
 (async () => {
     try {

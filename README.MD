@@ -29,7 +29,7 @@ Fork of the Midnight Lizard project.
         alert('An error occurred. Check the console for details.');
     }
 })();`;
-        console.log("✅ SUCCESS! Your new 'one-step' restore script is below. Copy the entire text block and save it to your text file.");
+        console.log("✅ SUCCESS! Copy the entire text block and save it to your text file.");
         console.log(restoreScript);
     } catch (e) {
         console.error('Error creating backup:', e);

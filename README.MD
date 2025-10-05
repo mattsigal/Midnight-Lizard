@@ -18,15 +18,23 @@ Fork of the Midnight Lizard project.
         const restoreScript = `
 (async () => {
     try {
-        const setStorageData = (storageArea, data) => new Promise(resolve => storageArea.set(data, resolve));
-        await setStorageData(chrome.storage.sync, ${syncJson});
-        await setStorageData(chrome.storage.local, ${localJson});
-        alert('Settings have been restored!');
-    } catch (e) { console.error('Error restoring settings:', e); }
+        const combinedSettings = { ...${localJson}, ...${syncJson} };
+        await new Promise(resolve => {
+            chrome.storage.local.set(combinedSettings, resolve);
+        });
+        alert('✅ Success! Settings have been restored to local storage. Close and re-open the popup to see your changes.');
+        console.log("✅ Restore complete!");
+    } catch (e) {
+        console.error('An error occurred during restore:', e);
+        alert('An error occurred. Check the console for details.');
+    }
 })();`;
-        console.log("✅ SUCCESS! Copy the entire text block below (starting with '(async () =>') and save it to a text file.");
+        console.log("✅ SUCCESS! Your new 'one-step' restore script is below. Copy the entire text block and save it to your text file.");
         console.log(restoreScript);
-    } catch (e) { console.error('Error creating backup:', e); }
+    } catch (e) {
+        console.error('Error creating backup:', e);
+        alert('An error occurred during backup. Check the console for details.');
+    }
 })();
 ```
 4. Copy the async() output to a textfile.
@@ -49,34 +57,12 @@ docker rm extractor
 1. Copy the MidnightLizard folder to a folder for your web browser to access.
 2. Use Developer Mode to install the extension from the "Load unpacked" dialogue box.
 3. To import the saved preferences, open the Midnight Lizard settings box and go to the Console view. Paste the entire textfile from Step 4 into the console.
-4. Finally run the following in the same console area to copy the preferences from sync storage to local storage:
-```
-(async () => {
-    try {
-        console.log("Reading all settings from sync storage...");
-        const syncSettings = await new Promise(resolve => {
-            chrome.storage.sync.get(null, resolve);
-        });
-        if (Object.keys(syncSettings).length === 0) {
-            alert("Sync storage is empty. Nothing to copy.");
-            return;
-        }
-        console.log("Found settings! Writing them to local storage...");
-        await new Promise(resolve => {
-            chrome.storage.local.set(syncSettings, resolve);
-        });
-        alert('✅ Success! Settings have been copied over. Close and re-open the popup to see your changes.');
-    } catch (e) {
-        console.error('An error occurred during the copy:', e);
-    }
-})();
-```
+4. Finally run the script from step 1 again to copy the preferences to both local and sync storage.
 5. Restart Brave to see the changes!
 
 ## Moving Midnight Lizard to Other Devices
 
 Since this is compiled locally, it will not sync automatically to other devices. To manually sync the plug-in and it's preferences:
-
 1. Find the MidnightLizard directory and the saved preferences text file and place them somewhere the other devices access (e.g., OneDrive folder). 
 2. On the other machines, install the plug-in via Developer mode.
-3. Use the backup textfile to restore preferences.
+3. Use the backup textfile to restore preferences and run the script in step 1 to save them to both sync and local storage locations.

@@ -7,7 +7,7 @@
   "license": "MIT",
   "version": "10.7.0",
   "dependencies": {
-    "@types/chrome": "0.0.127",
+    "@types/chrome": "^0.1.22",
     "@types/firefox-webext-browser": "82.0.0",
     "@types/reflect-metadata": "0.1.0",
     "reflect-metadata": "0.1.13"

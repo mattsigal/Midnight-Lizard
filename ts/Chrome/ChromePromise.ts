@@ -11,6 +11,7 @@ export class ChromePromise
     runtime!: typeof Runtime;
     tabs!: typeof Tabs;
     commands!: typeof Commands;
+    scripting!: typeof Scripting;
 
     constructor()
     {
@@ -86,12 +87,18 @@ namespace Commands
     export declare function getAll(): Promise<chrome.commands.Command[]>;
 }
 
+namespace Scripting
+{
+    export declare function executeScript(injection: any): Promise<any[]>;
+    export declare function insertCSS(injection: chrome.scripting.CSSInjection): Promise<void>;
+}
+
 namespace Tabs
 {
     export declare function getCurrent(): Promise<chrome.tabs.Tab>;
     export declare function getZoom(tabId: number): Promise<number>;
-    export declare function insertCSS(tabId: number, details: chrome.tabs.InjectDetails): Promise<void>;
-    export declare function executeScript(tabId: number, details: chrome.tabs.InjectDetails): Promise<void>;
+    export declare function insertCSS(tabId: number, details: any): Promise<void>;
+    export declare function executeScript(tabId: number, details: any): Promise<void>;
     export declare function query(queryInfo: chrome.tabs.QueryInfo): Promise<chrome.tabs.Tab[]>;
     export declare function sendMessage<TResult>(tabId: number, message: any): Promise<TResult>;
 }

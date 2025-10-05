@@ -10,7 +10,7 @@ export class ChromeZoomService implements IZoomService
         chrome.tabs.onZoomChange.addListener(this.onZoomChanged.bind(this));
     }
 
-    protected onZoomChanged(e: chrome.tabs.ZoomChangeInfo)
+    protected onZoomChanged(e: chrome.tabs.OnZoomChangeInfo)
     {
         if (e.tabId)
         {

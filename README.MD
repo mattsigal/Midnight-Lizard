@@ -11,26 +11,37 @@ Fork of the Midnight Lizard project.
     try {
         if (!chrome || !chrome.storage) { throw new Error('Storage API not found.'); }
         const getStorageData = (storageArea) => new Promise(resolve => storageArea.get(null, result => resolve(result)));
+        
         const syncData = await getStorageData(chrome.storage.sync);
         const localData = await getStorageData(chrome.storage.local);
+        
         const syncJson = JSON.stringify(syncData);
         const localJson = JSON.stringify(localData);
+        
         const restoreScript = `
 (async () => {
     try {
-        const combinedSettings = { ...${localJson}, ...${syncJson} };
-        await new Promise(resolve => {
-            chrome.storage.local.set(combinedSettings, resolve);
-        });
-        alert('✅ Success! Settings have been restored to local storage. Close and re-open the popup to see your changes.');
+        const setStorageData = (storageArea, data) => new Promise(resolve => storageArea.set(data, resolve));
+
+        // Restore sync and local data to their proper places
+        console.log("Restoring settings to sync storage...");
+        await setStorageData(chrome.storage.sync, ${syncJson});
+
+        console.log("Restoring settings to local storage...");
+        await setStorageData(chrome.storage.local, ${localJson});
+
+        alert('✅ Success! Settings restored to sync and local storage.');
         console.log("✅ Restore complete!");
+
     } catch (e) {
         console.error('An error occurred during restore:', e);
         alert('An error occurred. Check the console for details.');
     }
 })();`;
-        console.log("✅ SUCCESS! Copy the entire text block and save it to your text file.");
+
+        console.log("✅ SUCCESS! Copy the entire text block below and save it to your text file.");
         console.log(restoreScript);
+
     } catch (e) {
         console.error('Error creating backup:', e);
         alert('An error occurred during backup. Check the console for details.');
@@ -63,6 +74,17 @@ docker rm extractor
 ## Moving Midnight Lizard to Other Devices
 
 Since this is compiled locally, it will not sync automatically to other devices. To manually sync the plug-in and it's preferences:
-1. Find the MidnightLizard directory and the saved preferences text file and place them somewhere the other devices access (e.g., OneDrive folder). 
+1. Find the compiled MidnightLizard directory and the saved preferences text file and place them somewhere the other devices access (e.g., OneDrive folder). 
 2. On the other machines, install the plug-in via Developer mode.
-3. Use the backup textfile to restore preferences and run the script in step 1 to save them to both sync and local storage locations.
+3. Use the code from the backup textfile to restore preferences.
+4. [OPTIONAL]: Run the following in the same console window to check that the restore worked (both the local and sync storage containers should be populated with your preferences):
+
+```
+(async () => {
+    const syncSettings = await new Promise(resolve => chrome.storage.sync.get(null, resolve));
+    const localSettings = await new Promise(resolve => chrome.storage.local.get(null, resolve));
+    
+    console.log("Sync Storage Content:", syncSettings);
+    console.log("Local Storage Content:", localSettings);
+})();
+```

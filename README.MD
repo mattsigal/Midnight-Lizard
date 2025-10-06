@@ -68,8 +68,7 @@ docker rm extractor
 1. Copy the MidnightLizard folder to a folder for your web browser to access.
 2. Use Developer Mode to install the extension from the "Load unpacked" dialogue box.
 3. To import the saved preferences, open the Midnight Lizard settings box and go to the Console view. Paste the entire textfile from Step 4 into the console.
-4. Finally run the script from step 1 again to copy the preferences to both local and sync storage.
-5. Restart Brave to see the changes!
+4. Restart Brave to see the changes!
 
 ## Moving Midnight Lizard to Other Devices
 
